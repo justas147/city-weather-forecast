@@ -1,0 +1,45 @@
+<h1>City daily weather forecast</h1>
+
+<div class="city-list">
+  <div class="button-bar">
+    <button mat-raised-button color="warn" (click)="openDialog('', '', true)">
+      Delete all
+    </button>
+    <button mat-raised-button color="primary" [routerLink]="['form']">
+        Add
+    </button>
+  </div>
+
+  <div style="margin-bottom: 5px;">Select a city to its description</div>
+  <table mat-table [dataSource]="cities" class="mat-elevation-z8">
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef> Name </th>
+      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+    </ng-container>
+  
+    <!-- Highest temperature Column -->
+    <ng-container matColumnDef="max">
+      <th mat-header-cell *matHeaderCellDef> Highest temperature </th>
+      <td mat-cell *matCellDef="let element"> {{element.maxTemperature}} </td>
+    </ng-container>
+  
+    <!-- Lowest temperature Column -->
+    <ng-container matColumnDef="min">
+      <th mat-header-cell *matHeaderCellDef> Lowest temperature </th>
+      <td mat-cell *matCellDef="let element"> {{element.minTemperature}} </td>
+    </ng-container>
+  
+    <!-- Edit/delete column -->
+    <ng-container matColumnDef="button">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let element">
+        <span [routerLink]="['form', element.placeCode]" class="material-icons icon">edit</span>
+        <span (click)="openDialog(element.name, element.placeCode, false)" class="material-icons icon">delete</span>
+      </td>
+    </ng-container>
+  
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>
