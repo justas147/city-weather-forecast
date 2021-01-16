@@ -11,11 +11,11 @@ namespace city_weather_forecast_API.Services
 {
     public class CityService : ICityService
     {
-        private readonly ICityInterface<City, string> _repository;
+        private readonly IRepository<City, string> _repository;
         private readonly IForecastApi _forecastApi;
         private readonly IMapper _mapper;
 
-        public CityService(ICityInterface<City, string> repository, IForecastApi forecastApi, IMapper mapper)
+        public CityService(IRepository<City, string> repository, IForecastApi forecastApi, IMapper mapper)
         {
             _repository = repository;
             _forecastApi = forecastApi;
@@ -26,7 +26,7 @@ namespace city_weather_forecast_API.Services
         {
             if (newItem == null) throw new ArgumentNullException(nameof(newItem));
 
-            if (_repository.CityExists(newItem.PlaceCode))
+            if (_repository.DoesEntityExist(newItem.PlaceCode))
                 return newItem;
 
             await _repository.Create(newItem);
@@ -77,7 +77,7 @@ namespace city_weather_forecast_API.Services
                 return;
             }
 
-            if (!_repository.CityExists(updateData.PlaceCode))
+            if (!_repository.DoesEntityExist(updateData.PlaceCode))
                 return;
 
             await _repository.Update(id, updateData);

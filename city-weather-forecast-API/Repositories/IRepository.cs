@@ -13,5 +13,6 @@ namespace city_weather_forecast_API.Repositories
         Task<bool> Update(K id, T entity);
         Task<bool> Delete(K id);
         Task<bool> DeleteAll();
+        bool DoesEntityExist(K id);
     }
 }
