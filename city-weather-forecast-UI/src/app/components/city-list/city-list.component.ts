@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { DeleteConfirmationDialogComponent } from '@components/delete-confirmation-dialog/delete-confirmation-dialog.component';
 import { CityService } from '@services/city.service';
@@ -26,7 +25,6 @@ export class CityListComponent implements OnInit {
 
   constructor(
     private cityService: CityService,
-    private router: Router,
     public dialog: MatDialog
   ) { }
 
@@ -49,11 +47,5 @@ export class CityListComponent implements OnInit {
         }, error => console.log(error));
       }
     });
-  }
-
-  selectElement(element: CityDetails){
-    console.log(element);
-    this.expandedElement = this.expandedElement === element ? null : element
-    console.log(this.expandedElement);
   }
 }
