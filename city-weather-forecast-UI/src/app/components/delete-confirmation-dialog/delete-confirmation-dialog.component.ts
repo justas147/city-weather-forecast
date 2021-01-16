@@ -30,14 +30,11 @@ export class DeleteConfirmationDialogComponent implements OnInit {
   }
 
   deleteAllCities(){
-    console.log("Delete all");
-    this.dialogRef.close(true);
-    // this.cityService.deleteAllCities().subscribe(
-    //   (data) => {
-    //     console.log('All cities deleted');
-    //     this.dialogRef.close(true);
-    //   },
-    //   error => console.log(error)
-    // );
+    this.cityService.deleteAllCities().subscribe(
+      (data) => {
+        this.dialogRef.close(true);
+      },
+      error => console.log(error)
+    );
   }
 }

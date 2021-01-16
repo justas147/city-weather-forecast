@@ -41,7 +41,7 @@ export class CityService {
     return this.http.delete<boolean>(`${this.cityApiUrl}/${cityCode}`);
   }
 
-  deleteAllCities(cityCode: string) {
-    return this.http.delete<boolean>(`${this.cityApiUrl}/${cityCode}`);
+  deleteAllCities() {
+    return this.http.delete<boolean>(`${this.cityApiUrl}/`);
   }
 }

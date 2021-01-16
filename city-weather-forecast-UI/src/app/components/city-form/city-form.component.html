@@ -1,7 +1,12 @@
 <div class="container">
-  <h2 style="text-align: center; margin-top:10px; font-weight: bold">Add city</h2>
+  <h2 style="text-align: center; margin-top:10px; font-weight: bold">
+    <div *ngIf="id != null;then editButton else addButton"></div>    
 
-  <form [formGroup]="cityForm" (ngSubmit)="addCity()">
+    <ng-template #editButton>Edit city</ng-template>
+    <ng-template #addButton>Add city</ng-template>
+  </h2>
+
+  <form [formGroup]="cityForm" (ngSubmit)="postCity()">
     <mat-form-field appearance="fill">
       <mat-label>City</mat-label>
       <!--
@@ -45,6 +50,11 @@
     <br>
     
     <div style="display: flex; flex-direction: row-reverse;">
-      <button mat-raised-button>Add</button>
+      <button mat-raised-button>
+        <div *ngIf="id != null;then editButton else addButton"></div>    
+
+        <ng-template #editButton>Edit</ng-template>
+        <ng-template #addButton>Add</ng-template>
+      </button>
     </div>
   </form>

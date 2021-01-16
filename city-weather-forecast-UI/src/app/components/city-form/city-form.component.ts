@@ -18,7 +18,6 @@ export class CityFormComponent implements OnInit {
   city: CityDetails;
 
   options: CitySelection[];
-
   filteredOptions: Observable<CitySelection[]>;
   
   cityForm = new FormGroup({
@@ -44,25 +43,53 @@ export class CityFormComponent implements OnInit {
     this.id = this.route.snapshot.paramMap.get('id');
 
     if(this.id !== null) {
-      // this.movieService.getMovie(this.id).subscribe(city => {
-      //   this.city = city;
-      //   let cityToEdit: CitySelection = { PlaceCode: this.city.code, Name: this.city.name};
-
-      //   this.cityForm.setValue({
-      //     city: cityToEdit,
-      //     description: this.city.description
-      //   })
-      // }, 
-      // error => console.log(error));
+      this.getCityToEdit();
     } else {
-      this.cityService.getCitySelection().subscribe(cities => {
-        this.options = cities;
-        this.filteredOptions = this.cityForm.get('city').valueChanges
-        .pipe(
-          startWith(''),
-          map(value => typeof value === 'string' ? value : value.Name),
-          map(name => name ? this._filter(name) : this.options.slice())
-        );
+      this.getCitySelections();
+    }
+  }
+
+  getCityToEdit(){
+    this.cityService.getCity(this.id).subscribe(city => {
+      this.city = city;
+      let cityToEdit: CitySelection = { placeCode: this.city.placeCode, name: this.city.name};
+
+      this.cityForm.setValue({
+        city: cityToEdit,
+        description: this.city.description
+      })
+
+      this.cityForm.get('city').disable();
+    }, 
+    error => console.log(error));
+  }
+
+  getCitySelections(){
+    this.cityService.getCitySelection().subscribe(cities => {
+      this.options = cities;
+      this.filteredOptions = this.cityForm.get('city').valueChanges
+      .pipe(
+        startWith(''),
+        map(value => typeof value === 'string' ? value : value.Name),
+        map(name => name ? this._filter(name) : this.options.slice())
+      );
+    }, error => console.log(error));
+  }
+
+  postCity() {
+    let newCity: City = { 
+      placeCode: this.code, 
+      name: this.name,
+      description: this.description
+    }
+
+    if(this.id !== null) {
+      this.cityService.editCity(this.id, newCity).subscribe(cities => {
+        this.router.navigate(['cities']);
+      }, error => console.log(error));
+    } else {
+      this.cityService.addCity(newCity).subscribe(cities => {
+        this.router.navigate(['cities']);
       }, error => console.log(error));
     }
   }
@@ -76,15 +103,4 @@ export class CityFormComponent implements OnInit {
     return this.options.filter(option => option.name.toLowerCase().indexOf(filterValue) === 0);
   }
 
-  addCity() {
-    let newCity: City = { 
-      placeCode: this.code, 
-      name: this.name,
-      description: this.description
-    }
-
-    this.cityService.addCity(newCity).subscribe(cities => {
-      this.router.navigate(['cities']);
-    }, error => console.log(error));
-  }
 }
