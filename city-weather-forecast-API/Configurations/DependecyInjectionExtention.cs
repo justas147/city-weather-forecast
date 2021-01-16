@@ -18,7 +18,7 @@ namespace city_weather_forecast_API.Configurations
         public static IServiceCollection AddInfrastructureDependencies(this IServiceCollection service)
         {
             return service
-                .AddScoped<ICityInterface<City, string>, CityRepository>();
+                .AddScoped<IRepository<City, string>, CityRepository>();
         }
 
         public static IServiceCollection AddApplicationDependencies(this IServiceCollection service)

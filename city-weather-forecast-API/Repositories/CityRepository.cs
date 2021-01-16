@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace city_weather_forecast_API.Repositories
 {
-    public class CityRepository : ICityInterface<City, string>
+    public class CityRepository : IRepository<City, string>
     {
         private readonly CityDbContext _context;
 
@@ -64,9 +64,9 @@ namespace city_weather_forecast_API.Repositories
             return changes > 0;
         }
 
-        public bool CityExists(string code)
+        public bool DoesEntityExist(string id)
         {
-            return _context.CityItem.Any(e => e.PlaceCode == code);
+            return _context.CityItem.Any(e => e.PlaceCode == id);
         }
     }
 }

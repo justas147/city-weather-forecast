@@ -9,6 +9,7 @@ th, tr, td {
 }
 
 table {
+  table-layout: fixed;
   width: 100%;
 }
 
@@ -18,6 +19,10 @@ button {
 
 span:hover {
   cursor: pointer;
+}
+
+tr.detail-row {
+  height: 0;
 }
 
 
@@ -41,6 +46,22 @@ span:hover {
   text-align: center;    
 }
 
-.mat-row:hover {
+.mat-row:not(.detail-row):hover {
   background-color: #E5E5E5;
+}
+
+.element-detail {
+  overflow: hidden;
+}
+
+.description-container {
+  text-align: left;
+  padding: 8px;
+}
+
+.element-description {
+  font-style: italic;
+  width: 95%;
+  word-wrap: break-word;
+  padding: 8px;
 }
