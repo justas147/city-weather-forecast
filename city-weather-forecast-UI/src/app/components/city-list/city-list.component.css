@@ -1,0 +1,67 @@
+h1 {
+  margin: 10px 0;
+  text-align: center;
+  font-weight: bold;
+}
+
+th, tr, td {
+  text-align: center;
+}
+
+table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+button {
+  margin: 0 5px;
+}
+
+span:hover {
+  cursor: pointer;
+}
+
+tr.detail-row {
+  height: 0;
+}
+
+
+.city-list {
+  margin: auto;
+  margin-top: 20px;
+  width: 90%;
+}
+
+.button-bar {
+  display: flex;
+  flex-direction: row-reverse;
+  margin: 10px;
+}
+
+.icon {
+  margin-left: 10px;
+}
+
+.mat-header-cell {   
+  text-align: center;    
+}
+
+.mat-row:not(.detail-row):hover {
+  background-color: #E5E5E5;
+}
+
+.element-detail {
+  overflow: hidden;
+}
+
+.description-container {
+  text-align: left;
+  padding: 8px;
+}
+
+.element-description {
+  font-style: italic;
+  width: 95%;
+  word-wrap: break-word;
+  padding: 8px;
+}
