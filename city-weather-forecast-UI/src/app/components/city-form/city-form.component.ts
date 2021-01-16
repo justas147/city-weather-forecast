@@ -4,8 +4,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CityDetails } from '@models/city-details';
 import { CitySelection } from '@models/city-selection';
 import { City } from '@models/city';
+import { untilDestroyed } from 'ngx-take-until-destroy';
 import { Observable } from 'rxjs';
-import { startWith, map } from 'rxjs/operators';
+import { startWith, map, debounceTime } from 'rxjs/operators';
 import { CityService } from '@services/city.service';
 
 @Component({
@@ -17,8 +18,10 @@ export class CityFormComponent implements OnInit {
   id: string;
   city: CityDetails;
 
+  visibleOptions: number = 4;
+
   options: CitySelection[];
-  filteredOptions: Observable<CitySelection[]>;
+  private originalOptions: CitySelection[] = [];
   
   cityForm = new FormGroup({
     city: new FormControl(null, [
@@ -67,12 +70,14 @@ export class CityFormComponent implements OnInit {
   getCitySelections(){
     this.cityService.getCitySelection().subscribe(cities => {
       this.options = cities;
-      this.filteredOptions = this.cityForm.get('city').valueChanges
-      .pipe(
-        startWith(''),
-        map(value => typeof value === 'string' ? value : value.Name),
-        map(name => name ? this._filter(name) : this.options.slice())
-      );
+      this.originalOptions = [...this.options];
+      this.cityForm.get('city').setValue(this.options[0]);
+      this.cityForm.get('city').valueChanges
+        .pipe(
+          debounceTime(300),
+          untilDestroyed(this)
+        )
+        .subscribe(term => this.search(term));
     }, error => console.log(error));
   }
 
@@ -94,13 +99,21 @@ export class CityFormComponent implements OnInit {
     }
   }
 
-  displayFn(city: CitySelection): string {
-    return city && city.name ? city.name : '';
+  select(option) {
+    this.cityForm.get('city').setValue(option);
   }
 
-  private _filter(name: string): CitySelection[] {
-    const filterValue = name.toLowerCase();
-    return this.options.filter(option => option.name.toLowerCase().indexOf(filterValue) === 0);
+  isActive(option) {
+    if (!this.cityForm.get('city')) {
+      return false;
+    }
+
+    return option.placeCode === this.code;
   }
 
+  search(value: string) {
+    this.options = this.originalOptions.filter(option => option.name.toLowerCase().includes(value));
+  }
+
+  ngOnDestroy() {}
 }

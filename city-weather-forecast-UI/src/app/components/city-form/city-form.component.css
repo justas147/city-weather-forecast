@@ -1,6 +1,5 @@
 mat-form-field {
   width: 100%;
-  padding: 4px;
   padding: 0 10px;
   margin: 5px 0;
   font-size: medium;
@@ -16,4 +15,37 @@ textarea {
   margin: auto;
   width: 90%;
   padding: 10px;
+}
+
+.select-menu {
+  color: #212529;
+  text-align: left;
+  list-style: none;
+  overflow-x: hidden;
+  background-color: #fff;
+  border: 1px solid rgba(0, 0, 0, .15);
+  width: 100%;
+  margin-left: 10px;
+}
+
+.select-menu-inner {
+  max-height: 160px;
+}
+
+.select-item {
+  height: 32px;
+  display: flex;
+  align-items: center;
+  padding: 0 7px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.select-item:hover {
+  background-color: whitesmoke;
+}
+
+.select-item:active {
+  background-color: lightgray;
+  color: #fff;
 }

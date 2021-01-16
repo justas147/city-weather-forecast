@@ -2,7 +2,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {ScrollingModule} from '@angular/cdk/scrolling';
 
 //Angular Material Components
 import {MatCheckboxModule} from '@angular/material/checkbox';
@@ -87,7 +88,8 @@ import { DeleteConfirmationDialogComponent } from '@components/delete-confirmati
     MatSnackBarModule,
     MatTableModule,
     MatSortModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    ScrollingModule
   ],
   providers: [],
   bootstrap: [AppComponent]
