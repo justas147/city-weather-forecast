@@ -67,12 +67,6 @@ export class CityFormComponent implements OnInit {
   getCitySelections(){
     this.cityService.getCitySelection().subscribe(cities => {
       this.options = cities;
-      this.filteredOptions = this.cityForm.get('city').valueChanges
-      .pipe(
-        startWith(''),
-        map(value => typeof value === 'string' ? value : value.Name),
-        map(name => name ? this._filter(name) : this.options.slice())
-      );
     }, error => console.log(error));
   }
 
@@ -93,14 +87,4 @@ export class CityFormComponent implements OnInit {
       }, error => console.log(error));
     }
   }
-
-  displayFn(city: CitySelection): string {
-    return city && city.name ? city.name : '';
-  }
-
-  private _filter(name: string): CitySelection[] {
-    const filterValue = name.toLowerCase();
-    return this.options.filter(option => option.name.toLowerCase().indexOf(filterValue) === 0);
-  }
-
 }
