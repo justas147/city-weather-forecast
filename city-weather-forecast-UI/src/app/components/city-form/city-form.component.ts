@@ -5,7 +5,6 @@ import { CityDetails } from '@models/city-details';
 import { CitySelection } from '@models/city-selection';
 import { City } from '@models/city';
 import { Observable } from 'rxjs';
-import { startWith, map } from 'rxjs/operators';
 import { CityService } from '@services/city.service';
 
 @Component({
@@ -15,8 +14,6 @@ import { CityService } from '@services/city.service';
 })
 export class CityFormComponent implements OnInit {
   id: string;
-  city: CityDetails;
-
   options: CitySelection[];
   filteredOptions: Observable<CitySelection[]>;
   
@@ -50,13 +47,11 @@ export class CityFormComponent implements OnInit {
   }
 
   getCityToEdit(){
-    this.cityService.getCity(this.id).subscribe(city => {
-      this.city = city;
-      let cityToEdit: CitySelection = { placeCode: this.city.placeCode, name: this.city.name};
+    this.cityService.getCity(this.id).subscribe(cityToEdit => {
 
-      this.cityForm.setValue({
+      this.cityForm.patchValue({
         city: cityToEdit,
-        description: this.city.description
+        description: cityToEdit.description
       })
 
       this.cityForm.get('city').disable();
@@ -71,6 +66,7 @@ export class CityFormComponent implements OnInit {
   }
 
   postCity() {
+    console.log(this.name);
     let newCity: City = { 
       placeCode: this.code, 
       name: this.name,
@@ -87,4 +83,8 @@ export class CityFormComponent implements OnInit {
       }, error => console.log(error));
     }
   }
+
+  compareWithFn(listOfItems, selectedItem){
+    return listOfItems && selectedItem && listOfItems.id === selectedItem.id; ;
+}
 }

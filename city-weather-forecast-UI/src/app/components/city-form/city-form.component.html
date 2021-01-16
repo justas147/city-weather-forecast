@@ -10,8 +10,8 @@
     <mat-form-field appearance="fill">
       <mat-label>City</mat-label>
 
-      <mat-select formControlName="city">
-        <mat-option *ngFor="let option of options" [value]="option">
+      <mat-select formControlName="city" >
+        <mat-option *ngFor="let option of options" [ngValue]="option">
           {{option.name}}
         </mat-option>
       </mat-select>
@@ -20,7 +20,6 @@
         <div *ngIf="cityForm.get('city').invalid && (cityForm.get('city').dirty || cityForm.get('city').touched)" 
           class="alert alert-danger">
           <div *ngIf="cityForm.get('city').errors.required">Select a city</div>
-          <div *ngIf="cityForm.get('city').value == null">Select valid city from the list</div>
         </div>
       </mat-error>
     </mat-form-field>
