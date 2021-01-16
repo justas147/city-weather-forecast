@@ -1,0 +1,17 @@
+<div *ngIf="data.deleteAll; then deleletAllCities else deleteOneCity"></div>
+
+<ng-template #deleletAllCities>
+  <h1 mat-dialog-title >Are you sure you want to delete all cities from your list ? </h1>
+  <div mat-dialog-actions>
+    <button mat-raised-button color="warn" (click)="deleteAllCities()">Yes, I'm sure</button>
+    <button mat-raised-button mat-dialog-close cdkFocusInitial>No</button>
+  </div>
+</ng-template>
+
+<ng-template #deleteOneCity>
+  <h1 mat-dialog-title >Are you sure you want to delete {{ data.name }} from your list ? </h1>
+  <div mat-dialog-actions>
+    <button mat-raised-button color="warn" (click)="deleteCity(data.code)">Yes, I'm sure</button>
+    <button mat-raised-button mat-dialog-close cdkFocusInitial>No</button>
+  </div>
+</ng-template>
