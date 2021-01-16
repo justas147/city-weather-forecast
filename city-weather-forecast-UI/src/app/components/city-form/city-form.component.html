@@ -15,37 +15,25 @@
           {{option.name}}
         </mat-option>
       </mat-select>
-
-      <mat-error>
-        <div *ngIf="cityForm.get('city').invalid && (cityForm.get('city').dirty || cityForm.get('city').touched)" 
-          class="alert alert-danger">
-          <div *ngIf="cityForm.get('city').errors.required">Select a city</div>
-        </div>
-      </mat-error>
       -->
-
       
-      <input formControlName="city" placeholder="Search.." autofocus (click)="$event.stopPropagation()" matInput value="[name]">
+      <input type="text" matInput formControlName="city" [matAutocomplete]="auto">
 
+      <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayFn">
+        <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+          {{option.name}}
+        </mat-option>
+      </mat-autocomplete>
+      
+     
       <mat-error>
         <div *ngIf="cityForm.get('city').invalid && (cityForm.get('city').dirty || cityForm.get('city').touched)" 
           class="alert alert-danger">
           <div *ngIf="cityForm.get('city').errors.required">Select a city</div>
+          <div *ngIf="cityForm.get('city').value == null">Select valid city from the list</div>
         </div>
       </mat-error>
-    
     </mat-form-field>
-
-    <div class="select-menu">
-      <cdk-virtual-scroll-viewport itemSize="32" class="select-menu-inner" [style.height.px]="visibleOptions * 32">
-
-        <div *ngIf="!options.length" class="select-item">No results found...</div>
-
-        <div *cdkVirtualFor="let option of options" class="select-item" [class.active]="isActive(option)" (click)="select(option)">
-          {{option.name}}
-        </div>
-      </cdk-virtual-scroll-viewport>
-    </div>
 
     <br>
 
@@ -71,4 +59,3 @@
       </button>
     </div>
   </form>
-</div>
