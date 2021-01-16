@@ -1,0 +1,73 @@
+<h1>City daily weather forecast</h1>
+
+<div class="city-list">
+  <div class="button-bar">
+    <button mat-raised-button color="warn" (click)="openDialog('', '', true)">
+      Delete all
+    </button>
+    <button mat-raised-button color="primary" [routerLink]="['form']">
+      Add
+    </button>
+  </div>
+
+  <div style="margin-bottom: 5px; font-size:smaller">Select a city to see its description</div>
+  <table mat-table [dataSource]="cities" multiTemplateDataRows class="mat-elevation-z8">
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef> Name </th>
+      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+    </ng-container>
+  
+    <!-- Highest temperature Column -->
+    <ng-container matColumnDef="maxTemp">
+      <th mat-header-cell *matHeaderCellDef> Highest temperature </th>
+      <td mat-cell *matCellDef="let element"> {{element.maxTemperature}} </td>
+    </ng-container>
+  
+    <!-- Lowest temperature Column -->
+    <ng-container matColumnDef="minTemp">
+      <th mat-header-cell *matHeaderCellDef> Lowest temperature </th>
+      <td mat-cell *matCellDef="let element"> {{element.minTemperature}} </td>
+    </ng-container>
+  
+    <!-- Edit/delete column -->
+    <ng-container matColumnDef="button">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let element">
+        <span [routerLink]="['form', element.placeCode]" class="material-icons icon">edit</span>
+        <span (click)="openDialog(element.name, element.placeCode, false)" class="material-icons icon">delete</span>
+      </td>
+    </ng-container>
+
+    <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+    <ng-container matColumnDef="expandedDetail">
+      <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+          <div class="element-detail" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+            <div class="description-container"> 
+              Description:
+              
+              <div *ngIf="element.description != ''; then withDescription else noDescription"></div>
+
+              <ng-template #withDescription>            
+                <div class="element-description">
+                {{element.description}}
+                </div>
+              </ng-template>
+              <ng-template #noDescription>
+                <div class="element-description">
+                  " "
+                </div>
+              </ng-template>
+
+            </div>
+          </div>
+      </td>
+    </ng-container>
+  
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let element; columns: displayedColumns;"
+      (click)="expandedElement = expandedElement === element ? null : element">
+    </tr>
+    <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></tr>
+  </table>
+</div>
