@@ -31,9 +31,9 @@ namespace city_weather_forecast_API.Services
             if (response.IsSuccessStatusCode)
             {
                 var responseString = await response.Content.ReadAsStringAsync();
-                JArray jsonArray = JArray.Parse(responseString);
+                JArray jsonResponseArray = JArray.Parse(responseString);
 
-                foreach (JToken place in jsonArray)
+                foreach (JToken place in jsonResponseArray)
                 {
                     cityList.Add(
                         new CitySelection
@@ -54,20 +54,20 @@ namespace city_weather_forecast_API.Services
 
         public async Task<string> GetTemperature(string CityCode, TemperatureExtremum extremumType)
         {
-            string fullPath = string.Format(GetPlaceForecastUrlPath, CityCode);
-            HttpResponseMessage response = await client.GetAsync(fullPath);
+            string fullApiUrlPath = string.Format(GetPlaceForecastUrlPath, CityCode);
+            HttpResponseMessage response = await client.GetAsync(fullApiUrlPath);
 
             if (response.IsSuccessStatusCode)
             {
                 var responseString = await response.Content.ReadAsStringAsync();
-                JObject jsonObject = JObject.Parse(responseString);
+                JObject jsonResponseObject = JObject.Parse(responseString);
 
                 switch (extremumType)
                 {
                     case TemperatureExtremum.Max:
-                        return GetTemperatureFromJson(jsonObject, -100, LessThenForecast).ToString();
+                        return GetTemperatureFromJson(jsonResponseObject, -100, LessThenForecast).ToString();
                     case TemperatureExtremum.Min:
-                        return GetTemperatureFromJson(jsonObject, 100, MoreThenForecast).ToString();
+                        return GetTemperatureFromJson(jsonResponseObject, 100, MoreThenForecast).ToString();
                     default:
                         break;
                 }
@@ -78,7 +78,7 @@ namespace city_weather_forecast_API.Services
 
         static double GetTemperatureFromJson(JObject jsonObject, double initTemperature, CompareTemperatureDelegate comperison)
         {
-            double temp = initTemperature;
+            double temperature = initTemperature;
             foreach (JToken forecast in jsonObject["forecastTimestamps"])
             {
                 string dateString = forecast.Value<string>("forecastTimeUtc");
@@ -86,27 +86,23 @@ namespace city_weather_forecast_API.Services
 
                 if (DateTime.TryParse(dateString, out DateTime forecastTime))
                 {
-                    if (IsStillNextDay(forecastTime) && comperison(temp, airTemperature))
+                    if (IsStillNextDay(forecastTime) && comperison(temperature, airTemperature))
                     {
-                        temp = airTemperature;
+                        temperature = airTemperature;
                     }
                 }
             }
 
-            return temp;
+            return temperature;
         }
 
         static bool IsStillNextDay(DateTime forecastDate)
         {
             DateTime endTime = DateTime.Now.AddHours(24);
             if (DateTime.Now <= forecastDate && endTime >= forecastDate)
-            {
                 return true;
-            }
             else
-            {
                 return false;
-            }
         }
 
         readonly CompareTemperatureDelegate MoreThenForecast = (temperature, forecast) => temperature > forecast;

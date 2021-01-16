@@ -2,7 +2,6 @@
 using city_weather_forecast_API.Models.DTO;
 using city_weather_forecast_API.Services.ServiceInterfaces;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Threading.Tasks;
 
 namespace city_weather_forecast_API.Controllers
