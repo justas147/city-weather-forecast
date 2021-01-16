@@ -12,13 +12,11 @@ namespace city_weather_forecast_API.Services
     public class CityService : ICityService
     {
         private readonly IRepository<City, string> _repository;
-        private readonly IForecastApi _forecastApi;
         private readonly IMapper _mapper;
 
-        public CityService(IRepository<City, string> repository, IForecastApi forecastApi, IMapper mapper)
+        public CityService(IRepository<City, string> repository, IMapper mapper)
         {
             _repository = repository;
-            _forecastApi = forecastApi;
             _mapper = mapper;
         }
 
@@ -48,12 +46,6 @@ namespace city_weather_forecast_API.Services
             var cities = await _repository.GetAll();
             var citiesDto = _mapper.Map<CityDetailsDTO[]>(cities);
 
-            foreach(var city in citiesDto)
-            {
-                city.MaxTemperature = _forecastApi.GetTemperature(city.PlaceCode, TemperatureExtremum.Max).Result;
-                city.MinTemperature = _forecastApi.GetTemperature(city.PlaceCode, TemperatureExtremum.Min).Result;
-            }
-
             return citiesDto;
         }
 
@@ -61,9 +53,6 @@ namespace city_weather_forecast_API.Services
         {
             var city = await _repository.GetById(id);
             var cityDto = _mapper.Map<CityDetailsDTO>(city);
-
-            cityDto.MaxTemperature = _forecastApi.GetTemperature(cityDto.PlaceCode, TemperatureExtremum.Max).Result;
-            cityDto.MinTemperature = _forecastApi.GetTemperature(cityDto.PlaceCode, TemperatureExtremum.Min).Result;
 
             return cityDto;
         }

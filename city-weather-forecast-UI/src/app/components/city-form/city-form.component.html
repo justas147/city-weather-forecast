@@ -15,7 +15,7 @@
           {{option.name}}
         </mat-option>
       </mat-select>
-    -->
+      -->
       
       <input type="text" matInput formControlName="city" [matAutocomplete]="auto">
 
@@ -30,6 +30,7 @@
         <div *ngIf="cityForm.get('city').invalid && (cityForm.get('city').dirty || cityForm.get('city').touched)" 
           class="alert alert-danger">
           <div *ngIf="cityForm.get('city').errors.required">Select a city</div>
+          <div *ngIf="cityForm.get('city').value == null">Select valid city from the list</div>
         </div>
       </mat-error>
     </mat-form-field>

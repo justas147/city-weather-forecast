@@ -1,6 +1,5 @@
-﻿using city_weather_forecast_API.Database;
-using city_weather_forecast_API.Models;
-using city_weather_forecast_API.Models.DTO;
+﻿using AutoMapper;
+using city_weather_forecast_API.Database;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -31,16 +30,6 @@ namespace city_weather_forecast_API.Configurations
         {
             string ConnectionString = configuration["Database:ConnectionString"];
             services.AddDbContext<CityDbContext>(opt => opt.UseSqlite(ConnectionString));
-        }
-
-        public static void SetUpAutoMapper(this IServiceCollection services)
-        {
-            var config = new AutoMapper.MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<City, CityDetailsDTO>();
-            });
-            var mapper = config.CreateMapper();
-            services.AddSingleton(mapper);
         }
     }
 }

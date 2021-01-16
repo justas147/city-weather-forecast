@@ -1,17 +1,10 @@
+using AutoMapper;
+using city_weather_forecast_API.Configurations;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using city_weather_forecast_API.Configurations;
 
 namespace city_weather_forecast_API
 {
@@ -29,7 +22,7 @@ namespace city_weather_forecast_API
         {
             services.AddAllDependencies();
             services.SetUpDatabase(Configuration);
-            services.SetUpAutoMapper();
+            services.AddAutoMapper(typeof(Startup));
             services.AddControllers();
             services.AddSwagger();
         }
