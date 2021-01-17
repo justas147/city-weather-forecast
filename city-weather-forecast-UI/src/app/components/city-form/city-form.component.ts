@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { CityDetails } from '@models/city-details';
+import { Router } from '@angular/router';
 import { CitySelection } from '@models/city-selection';
 import { City } from '@models/city';
 import { Observable } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
+import { untilDestroyed } from 'ngx-take-until-destroy';
 import { CityService } from '@services/city.service';
 
 @Component({
@@ -13,12 +14,16 @@ import { CityService } from '@services/city.service';
   styleUrls: ['./city-form.component.css']
 })
 export class CityFormComponent implements OnInit {
-  id: string;
   options: CitySelection[];
   filteredOptions: Observable<CitySelection[]>;
+  visibleOptions: number = 4;
+  private originalOptions: CitySelection[] = [];
   
   cityForm = new FormGroup({
-    city: new FormControl(null, [
+    placeCode: new FormControl(null, [
+      Validators.required
+    ]),
+    name: new FormControl(null, [
       Validators.required
     ]),
     description: new FormControl('', [
@@ -26,65 +31,85 @@ export class CityFormComponent implements OnInit {
     ]),
   });
 
-  get code() { return this.cityForm.get('city').value.placeCode; }
-  get name() { return this.cityForm.get('city').value.name; }
-  get description() { return this.cityForm.get('description').value; }
+  get code() { return this.cityForm.get('placeCode'); }
+  get name() { return this.cityForm.get('name'); }
+  get description() { return this.cityForm.get('description'); }
   
   constructor(
     private cityService: CityService,    
-    private route: ActivatedRoute,
     private router: Router 
   ) { }
 
-  ngOnInit() {
-    this.id = this.route.snapshot.paramMap.get('id');
-
-    if(this.id !== null) {
-      this.getCityToEdit();
-    } else {
-      this.getCitySelections();
-    }
-  }
-
-  getCityToEdit(){
-    this.cityService.getCity(this.id).subscribe(cityToEdit => {
-
-      this.cityForm.patchValue({
-        city: cityToEdit,
-        description: cityToEdit.description
-      })
-
-      this.cityForm.get('city').disable();
-    }, 
-    error => console.log(error));
-  }
-
-  getCitySelections(){
+  ngOnInit(): void {
     this.cityService.getCitySelection().subscribe(cities => {
       this.options = cities;
-    }, error => console.log(error));
+      this.originalOptions = [...this.options];
+
+      this.cityForm.get('name').valueChanges
+        .pipe(
+          debounceTime(300),
+          untilDestroyed(this)
+        )
+        .subscribe(term => {
+          this.search(term);
+        });
+    }, error => {
+      console.log(error);
+      this.router.navigate(['cities']);
+    });
   }
 
-  postCity() {
-    console.log(this.name);
+  postCity(): void {
+    if(!this.isInputValid(this.name.value)){
+      return;
+    }
+
     let newCity: City = { 
-      placeCode: this.code, 
-      name: this.name,
-      description: this.description
+      placeCode: this.code.value, 
+      name: this.name.value,
+      description: this.description.value
     }
 
-    if(this.id !== null) {
-      this.cityService.editCity(this.id, newCity).subscribe(cities => {
-        this.router.navigate(['cities']);
-      }, error => console.log(error));
+    this.cityService.addCity(newCity).subscribe(() => {
+      this.router.navigate(['cities']);
+    }, error => {
+      console.log(error);
+      this.router.navigate(['cities']);
+    });
+  }
+
+  select(option: CitySelection): void {
+    this.cityForm.get('placeCode').setValue(option.placeCode);
+    this.cityForm.get('name').setValue(option.name);
+  }
+
+  resetSelection(): void {
+    this.cityForm.get('placeCode').setValue(null);
+  }
+
+  search(value: string): void {
+    let input = value.toLowerCase();
+    this.options = this.originalOptions.filter(option => option.name.toLowerCase().startsWith(input));
+  }
+
+  isInputValid(inputName: string): boolean {
+    let newCityCheck: CitySelection = this.originalOptions.find(option => option.name === inputName);
+
+    if(newCityCheck == null || newCityCheck.placeCode != this.code.value){
+      this.resetSelection();
+      return false;
+    }
+
+    return true;
+  }
+
+  validationCheck(): boolean {
+    if((this.name.invalid && (this.name.dirty || this.name.touched)) || this.code.invalid) {
+      return true;
     } else {
-      this.cityService.addCity(newCity).subscribe(cities => {
-        this.router.navigate(['cities']);
-      }, error => console.log(error));
+      return false;
     }
   }
 
-  compareWithFn(listOfItems, selectedItem){
-    return listOfItems && selectedItem && listOfItems.id === selectedItem.id; ;
-}
+  ngOnDestroy(): void {}
 }

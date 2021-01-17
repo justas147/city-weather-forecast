@@ -2,7 +2,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 //Angular Material Components
 import {MatCheckboxModule} from '@angular/material/checkbox';
@@ -41,17 +42,20 @@ import { AppRoutingModule } from './app-routing.module';
 import { CityFormComponent } from '@components/city-form/city-form.component';
 import { CityListComponent } from '@components/city-list/city-list.component';
 import { DeleteConfirmationDialogComponent } from '@components/delete-confirmation-dialog/delete-confirmation-dialog.component';
+import { CityEditFormComponent } from './components/city-edit-form/city-edit-form.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     CityFormComponent,
     CityListComponent,
-    DeleteConfirmationDialogComponent
+    DeleteConfirmationDialogComponent,
+    CityEditFormComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    ScrollingModule,
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
