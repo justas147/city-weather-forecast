@@ -24,9 +24,9 @@ export class CityEditFormComponent implements OnInit {
     ]),
   });
 
-  get code() { return this.editCityForm.get('placeCode').value }
-  get name() { return this.editCityForm.get('name').value; }
-  get description() { return this.editCityForm.get('description').value; }
+  get code() { return this.editCityForm.get('placeCode'); }
+  get name() { return this.editCityForm.get('name'); }
+  get description() { return this.editCityForm.get('description'); }
   
   constructor(
     private cityService: CityService,    
@@ -34,7 +34,7 @@ export class CityEditFormComponent implements OnInit {
     private router: Router 
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id');
 
     this.cityService.getCity(this.id).subscribe(cityToEdit => {
@@ -45,20 +45,25 @@ export class CityEditFormComponent implements OnInit {
         description: cityToEdit.description
       })
 
-      this.editCityForm.get('name').disable();
+      this.name.disable();
     }, 
-    error => console.log(error));
+    error => {
+      console.log(error);
+    });
   }
 
-  editCity() {
+  editCity(): void{
     let newCity: City = { 
-      placeCode: this.code, 
-      name: this.name,
-      description: this.description
+      placeCode: this.code.value, 
+      name: this.name.value,
+      description: this.description.value
     }
 
-    this.cityService.editCity(this.id, newCity).subscribe(cities => {
+    this.cityService.editCity(this.id, newCity).subscribe(() => {
       this.router.navigate(['cities']);
-    }, error => console.log(error));
+    }, error => {
+      console.log(error);
+      this.router.navigate(['cities']);
+    });
   }
 }

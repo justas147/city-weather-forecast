@@ -16,7 +16,6 @@ import { CityService } from '@services/city.service';
 export class CityFormComponent implements OnInit {
   options: CitySelection[];
   filteredOptions: Observable<CitySelection[]>;
-
   visibleOptions: number = 4;
   private originalOptions: CitySelection[] = [];
   
@@ -32,16 +31,16 @@ export class CityFormComponent implements OnInit {
     ]),
   });
 
-  get code() { return this.cityForm.get('placeCode').value }
-  get name() { return this.cityForm.get('name').value; }
-  get description() { return this.cityForm.get('description').value; }
+  get code() { return this.cityForm.get('placeCode'); }
+  get name() { return this.cityForm.get('name'); }
+  get description() { return this.cityForm.get('description'); }
   
   constructor(
     private cityService: CityService,    
     private router: Router 
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.cityService.getCitySelection().subscribe(cities => {
       this.options = cities;
       this.originalOptions = [...this.options];
@@ -52,25 +51,31 @@ export class CityFormComponent implements OnInit {
           untilDestroyed(this)
         )
         .subscribe(term => {
-          this.removeFormValue();
-          this.search(term)
+          this.search(term);
         });
     }, error => {
-      
-      console.log(error)
+      console.log(error);
+      this.router.navigate(['cities']);
     });
   }
 
   postCity(): void {
-    let newCity: City = { 
-      placeCode: this.code, 
-      name: this.name,
-      description: this.description
+    if(!this.isInputValid(this.name.value)){
+      return;
     }
 
-    this.cityService.addCity(newCity).subscribe(cities => {
+    let newCity: City = { 
+      placeCode: this.code.value, 
+      name: this.name.value,
+      description: this.description.value
+    }
+
+    this.cityService.addCity(newCity).subscribe(() => {
       this.router.navigate(['cities']);
-    }, error => console.log(error));
+    }, error => {
+      console.log(error);
+      this.router.navigate(['cities']);
+    });
   }
 
   select(option: CitySelection): void {
@@ -78,12 +83,8 @@ export class CityFormComponent implements OnInit {
     this.cityForm.get('name').setValue(option.name);
   }
 
-  isActive(option: CitySelection): boolean {
-    if (!option) {
-      return false;
-    }
-
-    return option.placeCode === this.code;
+  resetSelection(): void {
+    this.cityForm.get('placeCode').setValue(null);
   }
 
   search(value: string): void {
@@ -91,9 +92,24 @@ export class CityFormComponent implements OnInit {
     this.options = this.originalOptions.filter(option => option.name.toLowerCase().startsWith(input));
   }
 
-  removeFormValue(): void{
-    this.cityForm.get('placeCode').reset();
+  isInputValid(inputName: string): boolean {
+    let newCityCheck: CitySelection = this.originalOptions.find(option => option.name === inputName);
+
+    if(newCityCheck == null || newCityCheck.placeCode != this.code.value){
+      this.resetSelection();
+      return false;
+    }
+
+    return true;
   }
 
-  ngOnDestroy() {}
+  validationCheck(): boolean {
+    if((this.name.invalid && (this.name.dirty || this.name.touched)) || this.code.invalid) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  ngOnDestroy(): void {}
 }
