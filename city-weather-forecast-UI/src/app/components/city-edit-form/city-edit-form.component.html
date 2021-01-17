@@ -1,0 +1,31 @@
+<div class="container">
+  <h2 style="text-align: center; margin-top:10px; font-weight: bold">
+    Edit city
+  </h2>
+
+  <form [formGroup]="editCityForm" (ngSubmit)="editCity()">
+    <mat-form-field appearance="fill">
+      <mat-label>City</mat-label>
+      <input formControlName="name" placeholder="Search.." autofocus matInput value="[name]">
+    </mat-form-field>
+    
+    <br>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Description</mat-label>
+      <textarea matInput formControlName="description"></textarea>
+
+      <mat-error>
+        <div *ngIf="description.invalid && (description.dirty || description.touched)" class="alert alert-danger">
+          <div *ngIf="description.errors.maxlength">Description can't be longer than 255 characters</div>
+        </div>
+      </mat-error>
+    </mat-form-field>
+
+    <br>
+    
+    <div style="display: flex; flex-direction: row-reverse;">
+      <button mat-raised-button>Edit</button>
+    </div>
+  </form>
+</div>

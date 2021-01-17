@@ -1,28 +1,33 @@
 <div class="container">
   <h2 style="text-align: center; margin-top:10px; font-weight: bold">
-    <div *ngIf="id != null;then editButton else addButton"></div>    
-
-    <ng-template #editButton>Edit city</ng-template>
-    <ng-template #addButton>Add city</ng-template>
+    Add city
   </h2>
 
   <form [formGroup]="cityForm" (ngSubmit)="postCity()">
     <mat-form-field appearance="fill">
       <mat-label>City</mat-label>
 
-      <mat-select formControlName="city" >
-        <mat-option *ngFor="let option of options" [ngValue]="option">
-          {{option.name}}
-        </mat-option>
-      </mat-select>
+      <input formControlName="name" placeholder="Search.." autofocus (click)="$event.stopPropagation()" matInput value="[name]">
 
       <mat-error>
-        <div *ngIf="cityForm.get('city').invalid && (cityForm.get('city').dirty || cityForm.get('city').touched)" 
+        <div *ngIf="cityForm.get('placeCode').invalid && (cityForm.get('placeCode').dirty || cityForm.get('placeCode').touched)" 
           class="alert alert-danger">
-          <div *ngIf="cityForm.get('city').errors.required">Select a city</div>
+          <div *ngIf="cityForm.get('placeCode').errors.required">Select a city</div>
+          <div *ngIf="cityForm.get('placeCode').value == null">Select valid city from the list</div>
         </div>
       </mat-error>
     </mat-form-field>
+
+    <div class="select-menu">
+      <cdk-virtual-scroll-viewport itemSize="32" class="select-menu-inner" [style.height.px]="visibleOptions * 32">
+
+        <div *ngIf="!options.length" class="select-item">No results found...</div>
+
+        <div *cdkVirtualFor="let option of options" class="select-item" [class.active]="isActive(option)" (click)="select(option)">
+          {{option.name}}
+        </div>
+      </cdk-virtual-scroll-viewport>
+    </div>
 
     <br>
 
@@ -40,11 +45,6 @@
     <br>
     
     <div style="display: flex; flex-direction: row-reverse;">
-      <button mat-raised-button>
-        <div *ngIf="id != null;then editButton else addButton"></div>    
-
-        <ng-template #editButton>Edit</ng-template>
-        <ng-template #addButton>Add</ng-template>
-      </button>
+      <button mat-raised-button>Add</button>
     </div>
   </form>
