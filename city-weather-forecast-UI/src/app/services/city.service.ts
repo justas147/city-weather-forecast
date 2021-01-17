@@ -37,11 +37,11 @@ export class CityService {
     return this.http.put<any>(`${this.cityApiUrl}/${cityCode}`, cityData, {headers})
   }
 
-  deleteCity(cityCode: string) {
+  deleteCity(cityCode: string): Observable<any> {
     return this.http.delete<boolean>(`${this.cityApiUrl}/${cityCode}`);
   }
 
-  deleteAllCities() {
+  deleteAllCities(): Observable<any> {
     return this.http.delete<boolean>(`${this.cityApiUrl}/`);
   }
 }

@@ -20,21 +20,25 @@ export class DeleteConfirmationDialogComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  deleteCity(code: string){
+  deleteCity(code: string): void {
     this.cityService.deleteCity(code).subscribe(
-      (data) => {
+      () => {
         this.dialogRef.close(true);
       },
-      error => console.log(error)
+      error => {
+        console.log(error);
+      }
     );
   }
 
-  deleteAllCities(){
+  deleteAllCities(): void {
     this.cityService.deleteAllCities().subscribe(
-      (data) => {
+      () => {
         this.dialogRef.close(true);
       },
-      error => console.log(error)
+      error => {
+        console.log(error);
+      }
     );
   }
 }
