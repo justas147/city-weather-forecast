@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "city-weather-forecast-API", "city-weather-forecast-API\city-weather-forecast-API.csproj", "{FED356B8-8E83-4F3F-9FF3-F95BCB8C06D5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "city-weather-forecast-API.Tests", "..\city-weather-forecast-API.Tests\city-weather-forecast-API.Tests.csproj", "{A3FFB912-AAB1-46BE-B01B-2C085725661F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "city-weather-forecast-API.Tests", "city-weather-forecast-API.Tests\city-weather-forecast-API.Tests.csproj", "{639E7322-8F1C-49DA-A9EA-B735533D8E93}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{FED356B8-8E83-4F3F-9FF3-F95BCB8C06D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FED356B8-8E83-4F3F-9FF3-F95BCB8C06D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FED356B8-8E83-4F3F-9FF3-F95BCB8C06D5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A3FFB912-AAB1-46BE-B01B-2C085725661F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A3FFB912-AAB1-46BE-B01B-2C085725661F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A3FFB912-AAB1-46BE-B01B-2C085725661F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A3FFB912-AAB1-46BE-B01B-2C085725661F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{639E7322-8F1C-49DA-A9EA-B735533D8E93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{639E7322-8F1C-49DA-A9EA-B735533D8E93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{639E7322-8F1C-49DA-A9EA-B735533D8E93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{639E7322-8F1C-49DA-A9EA-B735533D8E93}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
