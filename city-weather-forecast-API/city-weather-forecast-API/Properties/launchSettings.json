@@ -19,6 +19,7 @@
     },
     "city_weather_forecast_API": {
       "commandName": "Project",
+      "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
